@@ -1,0 +1,13 @@
+{% extends 'report/base.html' %}
+
+{% block content %}
+
+    <div class="jumbotron">
+             <h1 class="display-4">Title : {{ post.title }}</h1>
+             <h1>Category : {{ post.category }}</h1>
+             <h1>content : {{ post.content }}</h1>
+             <h1>File : {{ post.file }}</h1>
+             <h1>Reference_number : {{ post.reference_number }}</h1>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'report/base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="table-responsive">
+          <h1 >Category Information:</h1></br>
+          <a class="btn" href="/category/new/">Add Category</a>
+          <table class="table table-bordered" style= "width :50%;">
+              <thead>
+                    <tr class="text-center test">
+                        <th><font size="2">Category</font></th>
+                        <th><font size="2" >Actions</font></th>
+                    </tr>
+              </thead>
+              {% for items in posts %}
+                  <tr>
+                     <td>
+                        {{items.category}}
+                     </td>
+
+                     <td>
+                         <a class="btn" href="/category_detail/{{items.id}}/">view</a>
+                         <a class="btn" href="/category_update/{{items.id}}/">edit</a>
+                     </td>
+                   </tr>
+              {% endfor %}
+           </table>
+    </div>
+</div>
+
+
+{% endblock %}

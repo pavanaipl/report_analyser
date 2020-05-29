@@ -1,0 +1,59 @@
+{% extends 'report/base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="table-responsive">
+        <h1 >Report Information:</h1></br>
+        <form method="POST" class="post-form"  action="/filter_report/">{% csrf_token %}
+            <label for="from_date">From Date: </label>
+            <input id="from_date" type="date" name="from_date"  required />
+            <label for="to_date">To Date: </label>
+            <input id="to_date" type="date" name="to_date"  required />
+            <button type="submit" class="save btn btn-default">Submit</button>
+        </form>
+        <a class="btn" href="/report/new/">Add Report</a>
+        <table class="table table-bordered" style= "width :100%;">
+            <thead>
+                    <tr class="text-center test">
+                        <th><font size="2">Category</font></th>
+                        <th><font size="2">Title</font></th>
+                        <th><font size="2" >Content</font></th>
+                        <th><font size="2" >File</font></th>
+                        <th><font size="2" >Reference Number</font></th>
+                        <th><font size="2" >Actions</font></th>
+                    </tr>
+
+            </thead>
+           {% for items in posts %}
+
+              <tr>
+                 <td>
+                    {{items.category}}
+                 </td>
+                 <td>
+                    {{items.title}}
+                 </td>
+                 <td>
+                    {{items.content}}
+                 </td>
+                 <td>
+                    {{items.file}}
+                 </td>
+                 <td>
+                    {{items.reference_number}}
+                 </td>
+                 <td>
+                     <a class="btn" href="/report_detail/{{items.id}}/">view</a>
+                     <a class="btn" href="/report_update/{{items.id}}/">edit</a>
+                     <a class="btn" href="/report_comments/{{items.id}}/">comments</a>
+                 </td>
+              </tr>
+           {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
