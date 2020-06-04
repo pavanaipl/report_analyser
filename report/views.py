@@ -13,6 +13,8 @@ from django.http import QueryDict
 from django.contrib.auth.hashers import make_password
 from .authentication import is_authenticate
 from .permissions import IsAuthenticated
+from django_pivot.pivot import pivot
+from django.db.models import Avg
 
 def home(request):
     return render(request, 'report/base.html')
@@ -188,3 +190,7 @@ class UsersOtherAPIs(viewsets.ModelViewSet):
         users = UsersDetails.objects.all()
         serializer = UsersGetSerializers(users, many=True)
         return Response(serializer.data)
+
+    def pivot_queries(self, request):
+        pivot_table = pivot(Report, 'category', 'created', 'reference_number')
+        return Response(list(pivot_table))

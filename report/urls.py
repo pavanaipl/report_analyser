@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^signup/', UserAPIs.as_view({'post': 'signup'})),
     url(r'^login/', UserAPIs.as_view({'post': 'login'})),
     url(r'^users-list/', UsersOtherAPIs.as_view({'get': 'get_users_list'})),
+    url(r'^pivot-queries/', UsersOtherAPIs.as_view({'get': 'pivot_queries'})),
 
 
     ]

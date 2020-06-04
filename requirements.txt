@@ -3,3 +3,4 @@ djangorestframework==3.9.2
 pyfcm==1.4.7
 PyJWT==1.7.1
 cryptography==2.6.1
+django-pivot==1.8.1
