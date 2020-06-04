@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Report)
 admin.site.register(Category)
 admin.site.register(Comments)
+admin.site.register(UsersDetails)

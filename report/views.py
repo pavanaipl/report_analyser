@@ -1,11 +1,18 @@
 # encoding=utf8
-from django.shortcuts import render
-from django.utils import timezone
-from .models import *
-from .forms import *
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import render, redirect
 
+
+from .forms import *
+from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from .serializers import *
+from rest_framework import viewsets
+from .encryption import jwt_payload_handler, jwt_encode_handler
+from django.http import QueryDict
+from django.contrib.auth.hashers import make_password
+from .authentication import is_authenticate
+from .permissions import IsAuthenticated
 
 def home(request):
     return render(request, 'report/base.html')
@@ -114,3 +121,70 @@ def filter_report(request):
     to_date = request.POST["to_date"]
     report_data = Report.objects.filter(created__range=[from_date, to_date])
     return render(request, 'report/report_information.html', {'posts': report_data})
+
+class UserAPIs(viewsets.ModelViewSet):
+
+    @staticmethod
+    def signup(request):
+        user_obj = UsersDetails.objects.filter(email=request.data["email"])
+        if len(user_obj)==0:
+            data = QueryDict.dict(request.data)
+            data["username"]=request.data["email"]
+            data["password"] = make_password(data["password"])
+            serializer = UsersDetailsSerializers(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                user = UsersDetails.objects.get(id=serializer.data["id"])
+                serializer = UsersGetSerializers(user)
+                payload = jwt_payload_handler(user)
+                context = {
+                    'token': jwt_encode_handler(payload),
+                    'user': serializer.data,
+                    'status': 200
+                }
+                return Response(context)
+            return Response(serializer.errors, status=400)
+        else:
+            return Response({"message":"User already exists"}, 400)
+
+    @staticmethod
+    def login(request):
+        user_obj = UsersDetails.objects.filter(email=request.data["email"], active=True)
+        if len(user_obj) != 0:
+            username = request.data['email']
+            password = request.data['password']
+            # account_type = request.data['account_type']
+            user = is_authenticate(username, password)
+            if user is None:
+                context = {
+                    'message': "User credentials did not match",
+                    'status': 400
+                }
+                return Response(context)
+            payload = jwt_payload_handler(user)
+            serializer = UsersGetSerializers(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                context = {
+                    'token': jwt_encode_handler(payload),
+                    'user': serializer.data,
+                    'status': 200
+                }
+                return Response(context, 200)
+            else:
+                return Response(serializer.errors, 400)
+        else:
+            context = {
+                'message': "User does not exists",
+                'status': 400
+            }
+            return Response(context)
+
+
+class UsersOtherAPIs(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_users_list(self, request):
+        users = UsersDetails.objects.all()
+        serializer = UsersGetSerializers(users, many=True)
+        return Response(serializer.data)

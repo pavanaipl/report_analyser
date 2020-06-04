@@ -24,4 +24,9 @@ urlpatterns = [
     url(r'^report_comments/(?P<pk>\d+)/$', report_comments, name='report_comments'),
     url(r'^filter_report/$', filter_report, name='filter_report'),
 
+    url(r'^signup/', UserAPIs.as_view({'post': 'signup'})),
+    url(r'^login/', UserAPIs.as_view({'post': 'login'})),
+    url(r'^users-list/', UsersOtherAPIs.as_view({'get': 'get_users_list'})),
+
+
     ]

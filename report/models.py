@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
 
@@ -41,3 +41,20 @@ class Comments(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+
+
+class UsersDetails(User):
+
+
+    name = models.CharField(max_length=250, null=True, blank=True)
+    mobile_number = models.CharField(max_length=11,null=True, blank=True )
+    user_type = models.CharField(max_length=50, null=True, blank=True)
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+
+    def save(self, *args, **kwargs):
+
+        super(UsersDetails, self).save(*args, **kwargs)
