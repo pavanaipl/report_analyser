@@ -15,6 +15,9 @@ from .authentication import is_authenticate
 from .permissions import IsAuthenticated
 from django_pivot.pivot import pivot
 from django.db.models import Avg
+from django.http import HttpResponse
+
+from django.template import loader
 
 def home(request):
     return render(request, 'report/base.html')
@@ -194,3 +197,7 @@ class UsersOtherAPIs(viewsets.ModelViewSet):
     def pivot_queries(self, request):
         pivot_table = pivot(Report, 'category', 'created', 'reference_number')
         return Response(list(pivot_table))
+
+    def render_html(self, request):
+        template = loader.get_template('report/base.html')
+        return HttpResponse(template, content_type='text/html')
