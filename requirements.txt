@@ -1,5 +1,5 @@
 django==3.0.6
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 pyfcm==1.4.7
 PyJWT==1.7.1
 cryptography==2.6.1
