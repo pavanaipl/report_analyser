@@ -1,6 +1,6 @@
 django==3.0.6
 djangorestframework==3.9.2
 pyfcm==1.4.7
-PyJWT==1.7.1
+PyJWT==2.4.0
 cryptography==2.6.1
 django-pivot==1.8.1
